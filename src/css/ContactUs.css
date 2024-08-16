@@ -1,0 +1,14 @@
+.contact-form {
+    position: relative;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .contact-form .form-control {
+    border-radius: 0;
+  }
+  
+  .contact-form .btn {
+    border-radius: 0;
+  }
+  
