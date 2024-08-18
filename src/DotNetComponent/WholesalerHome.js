@@ -19,17 +19,6 @@ export default function WholesalerHome(){
     })
   }, [])
 
-    const [search, setSearch] = useState('');
-    const handleSearchChange = (e) => {
-        setSearch(e.target.value);
-      };
-
-      const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        // Handle the search functionality here
-        console.log('Searching for:', search);
-      };
-
     return (
         <div style={{backgroundColor:'beige'}}>
             <br/><br/><br/>
@@ -59,23 +48,14 @@ export default function WholesalerHome(){
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/logout" className="nav-link">
-                Logout
+              <Link to="/wholesaler/orders" className="nav-link">
+                Orders
               </Link>
             </li>
             <li className="nav-item">
-              <form className="d-flex" style={{height:20}} onSubmit={handleSearchSubmit}>
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  style={{height:40}}
-                  placeholder="Search products"
-                  aria-label="Search"
-                  value={search}
-                  onChange={handleSearchChange}
-                />
-                <button className="btn btn-outline-success custom-search-button" type="submit">Search</button>
-              </form>
+              <Link to="/logout" className="nav-link">
+                Logout
+              </Link>
             </li>
           </ul>
         </div>

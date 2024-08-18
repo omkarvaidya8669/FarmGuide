@@ -83,6 +83,9 @@ export default function DeleteProductsFarmer() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link to="/farmer/orders" className="nav-link">Orders</Link>
+                </li>
+              <li className="nav-item">
                 <Link to="/logout" className="nav-link">
                   Logout
                 </Link>
@@ -99,9 +102,8 @@ export default function DeleteProductsFarmer() {
               <tr>
                 <th>Product</th>
                 <th>Sub Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Actions</th>
+                <th>Quantity(kg)</th>
+                <th>Price(per kg)</th>
               </tr>
             </thead>
             <tbody>
@@ -110,7 +112,7 @@ export default function DeleteProductsFarmer() {
                   <td>{product.product.pname}</td>
                   <td>{product.subProduct.spname}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.price}</td>
+                  <td>₹{product.price}</td>
                   <td>
                     <button
                       className="btn btn-danger"

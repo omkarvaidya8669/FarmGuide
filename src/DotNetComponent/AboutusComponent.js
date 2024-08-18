@@ -29,7 +29,7 @@ export default function AboutUs() {
         </p>
         <h3>Our Mission</h3>
         <p>
-          To bridge the gap between farmers and consumers by providing a reliable platform that ensures 
+          To bridge the gap between farmers and wholesalers by providing a reliable platform that ensures 
           fair trade and supports local agriculture.
         </p>
       </div>

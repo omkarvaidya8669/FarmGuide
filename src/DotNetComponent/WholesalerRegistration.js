@@ -38,6 +38,7 @@ export default function WholesalerRegistration() {
   const [errors, setErrors] = useState({});
   const [city, setCity] = useState([]);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [apiMessage, setApiMessage] = useState('');
 
   const togglePassword = () => {
     setPasswordType(passwordType === 'password' ? 'text' : 'password');
@@ -50,7 +51,7 @@ export default function WholesalerRegistration() {
     if (!info.lastName) errors.lastName = "Last Name is required";
     if (!/^[A-Z][a-zA-Z]{0,19}$/.test(info.lastName)) errors.lastName = "Last Name must start with capital letter and only contain letters!";
     if (!info.address) errors.address = "Address is required";
-    if (!/^[a-zA-Z0-9\s,'/.-]{15,50}$/.test(info.address)) errors.address = "Address must contain characters only between 15 to 50!";
+    if (!/^[a-zA-Z0-9\s,'/.-]{15,100}$/.test(info.address)) errors.address = "Address must contain characters only between 15 to 100!";
     if (!info.city) errors.city = "City is required";
     if (!info.gst_no.trim()) errors.gst_no = "GST number is required";
     if (!/^[A-Z0-9]{15}$/.test(info.gst_no)) errors.gst_no = "GST Number can contain only 15 characters (capital letters and digits)!";
@@ -81,7 +82,7 @@ export default function WholesalerRegistration() {
       setErrors(validationErrors);
       return;
     }
-
+  
     const dataToSend = {
       fname: info.firstName,
       lname: info.lastName,
@@ -97,33 +98,33 @@ export default function WholesalerRegistration() {
         status: 1
       }
     };
-
-    const reqdata = {
+  
+    fetch("https://localhost:7219/api/Wholesaler/SaveWholesaler", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dataToSend)
-    };
-
-    fetch("https://localhost:7219/api/Wholesaler/SaveWholesaler", reqdata)
-      .then(resp => {
-        if (!resp.ok) {
+    })
+    .then(resp => {
+      if (!resp.ok) {
           return resp.json().then(error => {
-            throw new Error(JSON.stringify(error.error));
+              throw new Error(JSON.stringify(error.errors));
+           
           });
-        }
-        return resp.json();
-      })
-      .then(data => {
-        setRegistrationSuccess(true); 
-        console.log("Success:", data);
-        dispatch({ type: 'reset' }); 
-        setErrors({}); 
-      })
-      .catch(error => {
-        console.error("Error:", error.message);
-        setRegistrationSuccess(false); 
-      });
+      }
+      return resp.json();
+  })
+  .then(data => {
+    setApiMessage("Registration successful! You are now a prestigious member of FarmGuide family.");
+    setRegistrationSuccess(true);
+    dispatch({ type: 'reset' });
+    setErrors({});
+  })
+  .catch(error => {
+      console.error("Error:", error.message);
+      setApiMessage("Registration failed! Values for 1 or more fields marked with * already exits.. replace them with unique values");
+  });
   };
+
 
   return (
     <div className="login-card" style={{ top: 30 }}>
@@ -131,7 +132,7 @@ export default function WholesalerRegistration() {
       <h2>Wholesaler Registration</h2>
       <form className="login-form" onSubmit={sendData}>
         <div className="mb-3">
-          <label htmlFor="username" className="form-label">Username:</label>
+          <label htmlFor="username" className="form-label">Username:<span className="required">*</span></label>
           <input
             type="text"
             className="form-control"
@@ -143,7 +144,7 @@ export default function WholesalerRegistration() {
           />
           {errors.username && <p className="error-message">{errors.username}</p>}
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="pwd" className="form-label">Password:</label>
           <input
@@ -161,10 +162,10 @@ export default function WholesalerRegistration() {
           <input type='checkbox' checked={passwordType !== 'password'} onChange={togglePassword} />
           <label className='m-2'>Show Password</label>
         </div>
-        
+
         <hr />
         <b><h5>Personal Details</h5></b>
-        
+
         <div className="mb-3">
           <label htmlFor="firstName" className="form-label">First Name:</label>
           <input
@@ -178,7 +179,7 @@ export default function WholesalerRegistration() {
           />
           {errors.firstName && <p className="error-message">{errors.firstName}</p>}
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="lastName" className="form-label">Last Name:</label>
           <input
@@ -192,7 +193,7 @@ export default function WholesalerRegistration() {
           />
           {errors.lastName && <p className="error-message">{errors.lastName}</p>}
         </div>
-        
+
         <div className="mb-3">
           <label htmlFor="address" className="form-label">Address:</label>
           <input
@@ -207,9 +208,9 @@ export default function WholesalerRegistration() {
           />
           {errors.address && <p className="error-message">{errors.address}</p>}
         </div>
-        
+
         <div className="mb-3">
-          <label htmlFor="gst_no" className="form-label">GST no:</label>
+          <label htmlFor="gst_no" className="form-label">GST no:<span className="required">*</span></label>
           <input
             type="text"
             className="form-control"
@@ -221,9 +222,9 @@ export default function WholesalerRegistration() {
           />
           {errors.gst_no && <p className="error-message">{errors.gst_no}</p>}
         </div>
-        
+
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email:</label>
+          <label htmlFor="email" className="form-label">Email:<span className="required">*</span></label>
           <input
             type="email"
             className="form-control"
@@ -235,9 +236,9 @@ export default function WholesalerRegistration() {
           />
           {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
-        
+
         <div className="mb-3">
-          <label htmlFor="mobile_no" className="form-label">Mobile no:</label>
+          <label htmlFor="mobile_no" className="form-label">Mobile no:<span className="required">*</span></label>
           <input
             type="number"
             className="form-control"
@@ -249,32 +250,33 @@ export default function WholesalerRegistration() {
           />
           {errors.mobile_no && <p className="error-message">{errors.mobile_no}</p>}
         </div>
-        
+
         <div className="mb-3">
-            <label htmlFor="city" className="form-label">City:</label>
-            <select
-              id="city"
-              className="form-select"
-              value={info.city}
-              onChange={(e) => handleFieldChange('city', e.target.value)}
-              required
-            >
-              <option value="">Select City</option>
-              {city.map(c => (
-                <option key={c.cityid} value={c.cityid}>{c.cityname}</option>
-              ))}
-            </select>
-            {errors.city && <p className="error-message">{errors.city}</p>}
-          </div>
+          <label htmlFor="city" className="form-label">City:</label>
+          <select
+            id="city"
+            className="form-select"
+            value={info.city}
+            onChange={(e) => handleFieldChange('city', e.target.value)}
+            required
+          >
+            <option value="">Select City</option>
+            {city.map(c => (
+              <option key={c.cityid} value={c.cityid}>{c.cityname}</option>
+            ))}
+          </select>
+          {errors.city && <p className="error-message">{errors.city}</p>}
+        </div>
+        
         <div className="button-group">
           <button type="submit" className="btn btn-primary m-3">Register</button>
           <button type="button" className="btn btn-primary" onClick={() => dispatch({ type: 'reset' })}>Clear</button>
         </div>
       </form>
 
-      {registrationSuccess && (
-        <div className="alert alert-success mt-3">
-          Registration successful! You are now a prestigious member of FarmGuide family.
+      {apiMessage && (
+        <div className={`alert ${registrationSuccess ? 'alert-success' : 'alert-danger'} mt-3`}>
+          {apiMessage}
         </div>
       )}
     </div>

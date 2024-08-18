@@ -38,6 +38,7 @@ export default function FarmerRegistration() {
   const [errors, setErrors] = useState({});
   const [city, setCity] = useState([]);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [apiMessage, setApiMessage] = useState('');
 
   const togglePassword = () => {
     setPasswordType(passwordType === 'password' ? 'text' : 'password');
@@ -46,7 +47,6 @@ export default function FarmerRegistration() {
   const handleFieldChange = (field, value) => {
     dispatch({ type: 'update', fld: field, val: value });
 
-    // Clear the specific error
     if (errors[field]) {
       setErrors(prevErrors => {
         const newErrors = { ...prevErrors };
@@ -63,7 +63,7 @@ export default function FarmerRegistration() {
     if (!info.lastName) errors.lastName = "Last Name is required";
     if (!/^[A-Z]{1}[a-zA-Z]{0,19}$/.test(info.lastName)) errors.lastName = "Last Name must start with capital letter and only contain letters!";
     if (!info.address) errors.address = "Address is required";
-    if (!/^[a-zA-Z0-9\s,'/.-]{15,50}$/.test(info.address)) errors.address = "Address must contain characters only between 15 to 50!";
+    if (!/^[a-zA-Z0-9\s,'/.-]{15,100}$/.test(info.address)) errors.address = "Address must contain characters only between 15 to 100!";
     if (!info.cityid) errors.cityid = "City is required";
     if (!info.aadhar_no) errors.aadhar_no = "Aadhar number is required";
     if (!/^\d{12}$/.test(info.aadhar_no)) errors.aadhar_no = "Aadhar Number can contain only 12 digits!";
@@ -72,7 +72,7 @@ export default function FarmerRegistration() {
     if (!info.mobile_no) errors.mobile_no = "Mobile number is required";
     if (!/^\d{10}$/.test(info.mobile_no)) errors.mobile_no = "Mobile number must be of 10 digits";
     if (!info.username) errors.username = "Username is required";
-    if (!/^[A-Za-z]{1}[A-Za-z0-9]{5,12}$/.test(info.username)) errors.username = "Username must be of 5 to 12 characters with only alphabets and digits!";
+    if (!/^[A-Za-z]{1}[A-Za-z0-9]{4,12}$/.test(info.username)) errors.username = "Username must start with capital letter and be of 5 to 12 characters with only alphabets and digits!";
     if (!info.pwd) errors.pwd = "Password is required";
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,12}$/.test(info.pwd)) errors.pwd = "Password must contain at least 1 capital, 1 small letter, 1 digit, 1 special character and should be of length 6-12 only!";
     return errors;
@@ -110,24 +110,26 @@ export default function FarmerRegistration() {
     };
 
     fetch("https://localhost:7219/api/Farmer/SaveFarmer", reqdata)
-      .then(resp => {
-        if (!resp.ok) {
+    .then(resp => {
+      if (!resp.ok) {
           return resp.json().then(error => {
-            throw new Error(JSON.stringify(error.error));
+              throw new Error(JSON.stringify(error.errors));
+           
           });
-        }
-        return resp.json();
-      })
-      .then(data => {
-        console.log("Success:", data);
-        dispatch({ type: 'reset' });
-        setErrors({});
-        setRegistrationSuccess(true);
-      })
-      .catch(error => {
-        console.error("Error:", error.message);
-      });
-  }
+      }
+      return resp.json();
+  })
+  .then(data => {
+    setApiMessage("Registration successful! You are now a prestigious member of FarmGuide family.");
+    setRegistrationSuccess(true);
+    dispatch({ type: 'reset' });
+    setErrors({});
+  })
+  .catch(error => {
+      console.error("Error:", error.message);
+      setApiMessage("Registration failed! Values for 1 or more fields marked with * already exits.. replace them with unique values");
+  });
+};
 
   return (
     <div className="login-card" style={{ top: 30 }}>
@@ -135,7 +137,7 @@ export default function FarmerRegistration() {
       <h2>Farmer Registration</h2>
       <form className="login-form" onSubmit={sendData}>
         <div className="mb-3">
-          <label htmlFor="username" className="form-label">Username:</label>
+          <label htmlFor="username" className="form-label">Username:<span className="required">*</span></label>
           <input
             type="text"
             className="form-control"
@@ -207,7 +209,7 @@ export default function FarmerRegistration() {
           {errors.address && <p className="error-message">{errors.address}</p>}
         </div>
         <div className="mb-3">
-          <label htmlFor="aadhar_no" className="form-label">Aadhar no:</label>
+          <label htmlFor="aadhar_no" className="form-label">Aadhar no:<span className="required">*</span></label>
           <input
             type="text"
             className="form-control"
@@ -220,7 +222,7 @@ export default function FarmerRegistration() {
           {errors.aadhar_no && <p className="error-message">{errors.aadhar_no}</p>}
         </div>
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email:</label>
+          <label htmlFor="email" className="form-label">Email:<span className="required">*</span></label>
           <input
             type="email"
             className="form-control"
@@ -233,7 +235,7 @@ export default function FarmerRegistration() {
           {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
         <div className="mb-3">
-          <label htmlFor="mobile_no" className="form-label">Mobile no:</label>
+          <label htmlFor="mobile_no" className="form-label">Mobile no:<span className="required">*</span></label>
           <input
             type="number"
             className="form-control"
@@ -267,9 +269,9 @@ export default function FarmerRegistration() {
         </div>
       </form>
 
-      {registrationSuccess && (
-        <div className="alert alert-success mt-3" role="alert">
-          Registration Successful! You are now a prestigious member of FarmGuide family.
+      {apiMessage && (
+        <div className={`alert ${registrationSuccess ? 'alert-success' : 'alert-danger'} mt-3`}>
+          {apiMessage}
         </div>
       )}
     </div>

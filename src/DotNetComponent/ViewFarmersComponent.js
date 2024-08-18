@@ -50,8 +50,8 @@ export default function ViewFarmers(){
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/viewtransactions" className="nav-link">
-                View Transactions
+              <Link to="/vieworders" className="nav-link">
+                View Orders
               </Link>
             </li>
             <li className="nav-item">

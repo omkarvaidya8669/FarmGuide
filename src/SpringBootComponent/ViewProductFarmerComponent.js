@@ -105,6 +105,9 @@ export default function ViewProductsFarmer() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link to="/farmer/orders" className="nav-link">Orders</Link>
+             </li>
+              <li className="nav-item">
                 <Link to="/logout" className="nav-link">
                   Logout
                 </Link>
@@ -131,7 +134,7 @@ export default function ViewProductsFarmer() {
                   <td>{product.product.pname}</td>
                   <td>{product.subProduct.spname}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.price}</td>
+                  <td>₹{product.price}</td>
                   <td>
                     <button className="btn btn-warning" onClick={() => startEditing(product)}>Edit</button>
                   </td>

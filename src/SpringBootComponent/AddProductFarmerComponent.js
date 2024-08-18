@@ -151,6 +151,9 @@ export default function AddProductFarmer() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link to="/farmer/orders" className="nav-link">Orders</Link>
+              </li>
+              <li className="nav-item">
                 <Link to="/logout" className="nav-link">
                   Logout
                 </Link>
@@ -160,7 +163,7 @@ export default function AddProductFarmer() {
         </div>
       </nav>
       <div className="login-card" style={{ top: 30 }}>
-        <h1>Add Your Product</h1>
+        <h1>Add New Product</h1>
         <form onSubmit={sendData} className="contact-form">
           <div className="mb-3">
             <label htmlFor="pid" className="form-label">Product:</label>
@@ -193,7 +196,7 @@ export default function AddProductFarmer() {
             </select>
           </div>
           <div className="mb-3">
-            <label htmlFor="quantity" className="form-label">Quantity:</label>
+            <label htmlFor="quantity" className="form-label">Quantity(kg):</label>
             <input
               type="number"
               className="form-control"
@@ -206,7 +209,7 @@ export default function AddProductFarmer() {
             {errors.quantity && <p className="error-message">{errors.quantity}</p>}
           </div>
           <div className="mb-3">
-            <label htmlFor="price" className="form-label">Price:</label>
+            <label htmlFor="price" className="form-label">Price(per kg):</label>
             <input
               type="number"
               className="form-control"

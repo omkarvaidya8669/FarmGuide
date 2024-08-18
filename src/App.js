@@ -20,7 +20,10 @@ import ViewFarmers from './DotNetComponent/ViewFarmersComponent';
 import ViewWholesalers from './DotNetComponent/ViewWholesalersComponent';
 import BuyProduct from './SpringBootComponent/BuyProductComponent';
 import AddProduct from './SpringBootComponent/AddProductComponent';
-import Cart from './SpringBootComponent/CartComponent';
+import ViewOrders from './SpringBootComponent/OrderComponent';
+import ViewCart from './SpringBootComponent/CartComponent';
+import FarmerOrders from './SpringBootComponent/FarmerOrdersComponent';
+import AdminViewOrders from './SpringBootComponent/AdminOrdersComponent';
 
 
 function App() {
@@ -48,7 +51,10 @@ function App() {
             <Route path="/viewwholesalers" element={<ViewWholesalers />}></Route>
             <Route path="/wholesaler/buy" element={<BuyProduct />}></Route>
             <Route path="/addproduct" element={<AddProduct />}></Route>
-            <Route path="/wholesaler/cart" element={<Cart />}></Route>
+            <Route path="/wholesaler/cart" element={<ViewCart />}></Route>
+            <Route path="/farmer/orders" element={<FarmerOrders />}></Route>
+            <Route path="/wholesaler/orders" element={<ViewOrders />}></Route>
+            <Route path="/vieworders" element={<AdminViewOrders />}></Route>
           </Routes>
         </header>
       {/* <footer className='footertag'>

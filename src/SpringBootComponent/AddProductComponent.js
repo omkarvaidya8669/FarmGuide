@@ -80,10 +80,10 @@ export default function AddProduct() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/viewtransactions">
-                    View Transactions
-                  </Link>
-                </li>
+              <Link to="/vieworders" className="nav-link">
+                View Orders
+              </Link>
+            </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/logout">
                     Logout
